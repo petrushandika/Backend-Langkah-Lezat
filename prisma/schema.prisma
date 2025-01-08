@@ -22,6 +22,7 @@ model User {
   role      Role      @relation(fields: [roleId], references: [id])
   orders    Order[]
   histories History[]
+  rolets    String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
