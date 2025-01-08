@@ -14,17 +14,110 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id        Int       @id @default(autoincrement())
+  username  String
+  email     String    @unique
+  password  String
+  roleId    Int
+  role      Role      @relation(fields: [roleId], references: [id])
+  orders    Order[]
+  histories History[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean? @default(false)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+model Role {
+  id    Int      @id @default(autoincrement())
+  name  RoleType @unique
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Menu {
+  id           Int           @id @default(autoincrement())
+  name         String
+  price        Float
+  categoryId   Int
+  category     Category      @relation(fields: [categoryId], references: [id])
+  orderDetails OrderDetail[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  menus Menu[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id           Int           @id @default(autoincrement())
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id])
+  totalPrice   Float
+  status       OrderStatus   @default(PENDING)
+  orderDetails OrderDetail[]
+  payments     Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderDetail {
+  id       Int   @id @default(autoincrement())
+  orderId  Int
+  order    Order @relation(fields: [orderId], references: [id])
+  menuId   Int
+  menu     Menu  @relation(fields: [menuId], references: [id])
+  quantity Int
+  price    Float // subtotal (quantity x menu.price)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Payment {
+  id      Int           @id @default(autoincrement())
+  orderId Int
+  order   Order         @relation(fields: [orderId], references: [id])
+  amount  Float
+  method  String
+  status  PaymentStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model History {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  action      String // e.g., "Created Order", "Updated Menu"
+  description String
+  createdAt   DateTime @default(now())
+}
+
+enum RoleType {
+  ADMIN
+  CASHIER
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELED
+}
+
+enum PaymentStatus {
+  PAID
+  FAILED
+  PENDING
 }
