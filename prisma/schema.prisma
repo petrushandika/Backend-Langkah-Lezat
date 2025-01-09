@@ -52,7 +52,6 @@ model Order {
   id           Int           @id @default(autoincrement())
   userId       Int
   user         User          @relation(fields: [userId], references: [id])
-  totalPrice   Float
   status       OrderStatus   @default(PENDING)
   orderDetails OrderDetail[]
   payments     Payment[]
@@ -73,8 +72,10 @@ model Payment {
   orderId Int
   order   Order         @relation(fields: [orderId], references: [id])
   amount  Float
-  method  String
   status  PaymentStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model History {
