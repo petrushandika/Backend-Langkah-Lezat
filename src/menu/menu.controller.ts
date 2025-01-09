@@ -26,17 +26,17 @@ export class MenuController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.menuService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    return await this.menuService.findOne(Number(id));
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateMenuDto: UpdateMenuDto) {
-    return await this.menuService.update(+id, updateMenuDto);
+  async update(@Param('id') id: number, @Body() updateMenuDto: UpdateMenuDto) {
+    return await this.menuService.update(Number(id), updateMenuDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return await this.menuService.remove(+id);
+  async remove(@Param('id') id: number) {
+    return await this.menuService.remove(Number(id));
   }
 }

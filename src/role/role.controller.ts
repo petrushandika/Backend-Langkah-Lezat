@@ -13,12 +13,12 @@ export class RoleController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roleService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.roleService.findOne(Number(id));
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.roleService.update(+id, updateRoleDto);
+  update(@Param('id') id: number, @Body() updateRoleDto: UpdateRoleDto) {
+    return this.roleService.update(Number(id), updateRoleDto);
   }
 }

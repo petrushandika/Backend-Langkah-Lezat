@@ -26,20 +26,20 @@ export class OrderController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.orderService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    return await this.orderService.findOne(Number(id));
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateOrderDto: UpdateOrderDto,
   ) {
-    return await this.orderService.update(+id, updateOrderDto);
+    return await this.orderService.update(Number(id), updateOrderDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return await this.orderService.remove(+id);
+  async remove(@Param('id') id: number) {
+    return await this.orderService.remove(Number(id));
   }
 }

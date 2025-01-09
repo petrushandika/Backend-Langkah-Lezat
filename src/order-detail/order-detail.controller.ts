@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { OrderDetailService } from './order-detail.service';
 import { CreateOrderDetailDto } from './dto/create-order-detail.dto';
 import { UpdateOrderDetailDto } from './dto/update-order-detail.dto';
@@ -8,27 +16,33 @@ export class OrderDetailController {
   constructor(private readonly orderDetailService: OrderDetailService) {}
 
   @Post()
-  create(@Body() createOrderDetailDto: CreateOrderDetailDto) {
-    return this.orderDetailService.create(createOrderDetailDto);
+  async create(@Body() createOrderDetailDto: CreateOrderDetailDto) {
+    return await this.orderDetailService.create(createOrderDetailDto);
   }
 
   @Get()
-  findAll() {
-    return this.orderDetailService.findAll();
+  async findAll() {
+    return await this.orderDetailService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderDetailService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    return await this.orderDetailService.findOne(Number(id));
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDetailDto: UpdateOrderDetailDto) {
-    return this.orderDetailService.update(+id, updateOrderDetailDto);
+  async update(
+    @Param('id') id: number,
+    @Body() updateOrderDetailDto: UpdateOrderDetailDto,
+  ) {
+    return await this.orderDetailService.update(
+      Number(id),
+      updateOrderDetailDto,
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderDetailService.remove(+id);
+  async remove(@Param('id') id: number) {
+    return await this.orderDetailService.remove(Number(id));
   }
 }
