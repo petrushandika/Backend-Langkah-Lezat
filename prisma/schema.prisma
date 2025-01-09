@@ -18,23 +18,19 @@ model User {
   username  String
   email     String    @unique
   password  String
-  roleId    Int
-  role      Role      @relation(fields: [roleId], references: [id])
+  roleId    Int?
+  role      Role?     @relation(fields: [roleId], references: [id])
   orders    Order[]
   histories History[]
-  rolets    String[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Role {
   id    Int      @id @default(autoincrement())
   name  RoleType @unique
   users User[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Menu {
@@ -44,18 +40,12 @@ model Menu {
   categoryId   Int
   category     Category      @relation(fields: [categoryId], references: [id])
   orderDetails OrderDetail[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
   name  String @unique
   menus Menu[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Order {
@@ -66,9 +56,6 @@ model Order {
   status       OrderStatus   @default(PENDING)
   orderDetails OrderDetail[]
   payments     Payment[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model OrderDetail {
@@ -79,9 +66,6 @@ model OrderDetail {
   menu     Menu  @relation(fields: [menuId], references: [id])
   quantity Int
   price    Float // subtotal (quantity x menu.price)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Payment {
@@ -91,9 +75,6 @@ model Payment {
   amount  Float
   method  String
   status  PaymentStatus
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model History {
