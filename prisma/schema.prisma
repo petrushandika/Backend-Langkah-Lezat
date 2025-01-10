@@ -14,12 +14,14 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String
-  email     String    @unique
-  password  String
-  roleId    Int?
-  role      Role?     @relation(fields: [roleId], references: [id])
+  id       Int    @id @default(autoincrement())
+  username String
+  email    String @unique
+  password String
+
+  roleId Int?
+  role   Role? @relation(fields: [roleId], references: [id])
+
   orders    Order[]
   histories History[]
 
@@ -28,51 +30,60 @@ model User {
 }
 
 model Role {
-  id    Int      @id @default(autoincrement())
-  name  RoleType @unique
+  id   Int      @id @default(autoincrement())
+  name RoleType @unique
+
   users User[]
 }
 
 model Menu {
-  id           Int           @id @default(autoincrement())
-  name         String
-  price        Float
-  categoryId   Int
-  category     Category      @relation(fields: [categoryId], references: [id])
+  id    Int    @id @default(autoincrement())
+  name  String
+  price Float
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
   orderDetails OrderDetail[]
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
   menus Menu[]
 }
 
 model Order {
-  id           Int           @id @default(autoincrement())
-  userId       Int
-  user         User          @relation(fields: [userId], references: [id])
-  status       OrderStatus   @default(PENDING)
+  id     Int         @id @default(autoincrement())
+  status OrderStatus @default(PENDING)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
   orderDetails OrderDetail[]
   payments     Payment[]
 }
 
 model OrderDetail {
   id       Int   @id @default(autoincrement())
-  orderId  Int
-  order    Order @relation(fields: [orderId], references: [id])
-  menuId   Int
-  menu     Menu  @relation(fields: [menuId], references: [id])
-  quantity Int
   price    Float // subtotal (quantity x menu.price)
+  quantity Int
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id])
+  menuId  Int
+  menu    Menu  @relation(fields: [menuId], references: [id])
 }
 
 model Payment {
-  id      Int           @id @default(autoincrement())
+  id     Int           @id @default(autoincrement())
+  bank   String
+  amount Int
+  status PaymentStatus
+
   orderId Int
-  order   Order         @relation(fields: [orderId], references: [id])
-  amount  Float
-  status  PaymentStatus
+  order   Order @relation(fields: [orderId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

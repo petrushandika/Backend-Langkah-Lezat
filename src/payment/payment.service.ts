@@ -1,26 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { OrderService } from 'src/order/order.service';
+import { PaymentStatus } from '@prisma/client';
 
 @Injectable()
 export class PaymentService {
-  create(createPaymentDto: CreatePaymentDto) {
-    return 'This action adds a new payment';
-  }
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly orderService: OrderService,
+  ) {}
 
-  findAll() {
-    return `This action returns all payment`;
-  }
+  async create(createPaymentDto: CreatePaymentDto) {
+    const { orderId } = createPaymentDto;
 
-  findOne(id: number) {
-    return `This action returns a #${id} payment`;
-  }
+    const order = await this.orderService.findOne(orderId);
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
 
-  update(id: number, updatePaymentDto: UpdatePaymentDto) {
-    return `This action updates a #${id} payment`;
-  }
+    const payment = await this.prismaService.payment.create({
+      data: {
+        ...createPaymentDto,
+        status: PaymentStatus.PENDING,
+      },
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} payment`;
+    return payment;
   }
 }

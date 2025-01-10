@@ -3,5 +3,5 @@ import { IsEnum } from 'class-validator';
 
 export class CreateRoleDto {
   @IsEnum(RoleType)
-  status: RoleType;
+  name: RoleType;
 }

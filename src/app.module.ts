@@ -9,8 +9,9 @@ import { OrderModule } from './order/order.module';
 import { OrderDetailModule } from './order-detail/order-detail.module';
 import { PaymentModule } from './payment/payment.module';
 import { HistoryModule } from './history/history.module';
+import { MidtransModule } from './midtrans/midtrans.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, RoleModule, AuthModule, CategoryModule, MenuModule, OrderModule, OrderDetailModule, PaymentModule, HistoryModule],
+  imports: [PrismaModule, UserModule, RoleModule, AuthModule, CategoryModule, MenuModule, OrderModule, OrderDetailModule, PaymentModule, HistoryModule, MidtransModule],
 })
 export class AppModule {}

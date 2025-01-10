@@ -26,7 +26,7 @@ export class OrderService {
   }
 
   async findOne(id: number) {
-    return await this.prismaService.order.findFirst({
+    const order = await this.prismaService.order.findUnique({
       where: {
         id,
       },
@@ -36,10 +36,12 @@ export class OrderService {
         payments: true,
       },
     });
+
+    return order;
   }
 
   async update(id: number, updateOrderDto: UpdateOrderDto) {
-    return await this.prismaService.order.update({
+    const order = await this.prismaService.order.update({
       where: {
         id,
       },
@@ -47,13 +49,17 @@ export class OrderService {
         ...updateOrderDto,
       },
     });
+
+    return order;
   }
 
   async remove(id: number) {
-    return await this.prismaService.order.delete({
+    const order = await this.prismaService.order.delete({
       where: {
         id,
       },
     });
+
+    return order;
   }
 }
