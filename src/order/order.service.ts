@@ -19,8 +19,7 @@ export class OrderService {
     return await this.prismaService.order.findMany({
       include: {
         user: true,
-        orderDetails: true,
-        payments: true,
+        orderDetail: true,
       },
     });
   }
@@ -32,8 +31,7 @@ export class OrderService {
       },
       include: {
         user: true,
-        orderDetails: true,
-        payments: true,
+        orderDetail: true,
       },
     });
 
