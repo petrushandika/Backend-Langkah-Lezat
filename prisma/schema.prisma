@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,16 +8,17 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   username String
-  email    String @unique
+  phone    String?
+  email    String  @unique
   password String
 
   roleId Int?
   role   Role? @relation(fields: [roleId], references: [id])
 
-  orders    Order[]
-  histories History[]
+  profile Profile?
+  orders  Order[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -36,10 +31,32 @@ model Role {
   users User[]
 }
 
+model Profile {
+  id Int @id @default(autoincrement())
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @unique
+
+  location Location[]
+}
+
+model Location {
+  id           Int    @id @default(autoincrement())
+  name         String
+  address      String
+  postalCode   Int
+  cityDistrict String
+
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int?
+}
+
 model Menu {
-  id    Int    @id @default(autoincrement())
-  name  String
-  price Float
+  id         Int     @id @default(autoincrement())
+  name       String
+  price      Float
+  offerPrice Float?
+  image      String?
 
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
@@ -48,21 +65,22 @@ model Menu {
 }
 
 model Category {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  id    Int           @id @default(autoincrement())
+  name  String
+  image String?
+  type  CategoryType?
 
-  menus Menu[]
+  menu Menu[]
 }
 
 model Order {
-  id     Int         @id @default(autoincrement())
-  status OrderStatus @default(PENDING)
+  id     Int          @id @default(autoincrement())
+  status OrderStatus?
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
-  orderDetails OrderDetail[]
-  payments     Payment[]
+  orderDetail OrderDetail[]
 }
 
 model OrderDetail {
@@ -76,42 +94,25 @@ model OrderDetail {
   menu    Menu  @relation(fields: [menuId], references: [id])
 }
 
-model Payment {
-  id     Int           @id @default(autoincrement())
-  bank   String
-  amount Int
-  status PaymentStatus
-
-  orderId Int
-  order   Order @relation(fields: [orderId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-}
-
-model History {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
-  action      String // e.g., "Created Order", "Updated Menu"
-  description String
-  createdAt   DateTime @default(now())
-}
-
 enum RoleType {
   ADMIN
   CASHIER
   CUSTOMER
 }
 
-enum OrderStatus {
-  PENDING
-  COMPLETED
-  CANCELED
+enum CategoryType {
+  Snacks
+  Chinese
+  North_Indian
+  Special_Meals
+  Main_Course
+  Bread
+  Dessert
 }
 
-enum PaymentStatus {
-  PAID
-  FAILED
-  PENDING
+enum OrderStatus {
+  Order_Dispatched
+  Order_Preparing
+  On_The_Way
+  Order_Delivered
 }
