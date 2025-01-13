@@ -5,10 +5,11 @@ export class CreateCategoryDto {
   @IsString()
   name: string;
 
-  @IsOptional()
   @IsString()
-  image: string;
+  @IsOptional()
+  image?: string;
 
+  @IsOptional()
   @IsEnum(CategoryType)
-  type: CategoryType;
+  type?: CategoryType;
 }

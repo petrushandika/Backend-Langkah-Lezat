@@ -10,7 +10,7 @@ export class CategoryService {
   async create(createCategoryDto: CreateCategoryDto) {
     return await this.prismaService.category.create({
       data: {
-        name: createCategoryDto.name,
+        ...createCategoryDto,
       },
     });
   }
@@ -33,7 +33,7 @@ export class CategoryService {
         id,
       },
       data: {
-        name: updateCategoryDto.name,
+        ...updateCategoryDto,
       },
     });
   }

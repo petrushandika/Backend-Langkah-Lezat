@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateMenuDto {
   @IsString()
@@ -6,6 +6,14 @@ export class CreateMenuDto {
 
   @IsNumber()
   price: number;
+
+  @IsOptional()
+  @IsNumber()
+  offerPrice?: number;
+
+  @IsOptional()
+  @IsString()
+  image?: string;
 
   @IsNumber()
   categoryId: number;
