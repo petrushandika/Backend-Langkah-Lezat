@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { CreateProfileDto } from './dto/create-profile.dto';
+import { CreateLocationDto } from './dto/create-location.dto';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -8,9 +11,7 @@ export class UserService {
 
   async getLoggedUser(id: number) {
     const loggedUser = await this.prismaService.user.findFirst({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
     delete loggedUser.password;
@@ -21,31 +22,55 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    const rawUser = await this.prismaService.user.findFirst({
-      where: {
-        id,
+    const user = await this.prismaService.user.findFirst({
+      where: { id },
+      include: {
+        profile: {
+          include: {
+            location: true,
+          },
+        },
       },
     });
 
-    return {
-      ...rawUser,
-    };
+    return user;
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     return await this.prismaService.user.update({
-      where: {
-        id,
-      },
+      where: { id },
       data: updateUserDto,
     });
   }
 
   async remove(id: number) {
     return await this.prismaService.user.delete({
-      where: {
-        id,
+      where: { id },
+    });
+  }
+
+  async createProfile(userId: number, createProfileDto: CreateProfileDto) {
+    const profile = await this.prismaService.profile.create({
+      data: {
+        ...createProfileDto,
+        userId,
       },
     });
+
+    return profile;
+  }
+
+  async createLocation(
+    profileId: number,
+    createLocationDto: CreateLocationDto,
+  ) {
+    const location = await this.prismaService.location.create({
+      data: {
+        ...createLocationDto,
+        profileId: Number(profileId),
+      },
+    });
+
+    return location;
   }
 }

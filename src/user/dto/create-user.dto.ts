@@ -1,15 +1,18 @@
-import { IsEmail, IsNumber, IsString } from 'class-validator';
+import { IsString, IsOptional, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { CreateProfileDto } from './create-profile.dto';
 
 export class CreateUserDto {
   @IsString()
   username: string;
 
-  @IsEmail()
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsString()
   email: string;
 
   @IsString()
   password: string;
-
-  @IsNumber()
-  roleId: number;
 }
