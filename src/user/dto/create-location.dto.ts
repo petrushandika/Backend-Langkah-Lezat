@@ -14,5 +14,8 @@ export class CreateLocationDto {
   cityDistrict: string;
 
   @IsNumber()
+  userId?: number;
+
+  @IsNumber()
   profileId: number;
 }

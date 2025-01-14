@@ -1,6 +1,4 @@
-import { IsString, IsOptional, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-import { CreateProfileDto } from './create-profile.dto';
+import { IsString, IsOptional } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()

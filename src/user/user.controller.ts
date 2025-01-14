@@ -40,31 +40,39 @@ export class UserController {
     return this.userService.remove(id);
   }
 
-  @Post('profile/:userId')
+  @Post('profile/:id')
   async createProfile(
-    @Param('userId') userId: number,
+    @Param('id') id: number,
     @Body() createProfileDto: CreateProfileDto,
   ) {
     const profile = await this.userService.createProfile(
-      userId,
+      Number(id),
       createProfileDto,
     );
-    return {
-      profile,
-    };
+    return { profile };
   }
 
-  @Post('location/:profileId/')
-  async createLocation(
-    @Param('profileId') profileId: number,
+  @Patch('profile/:id')
+  async updateProfile(
+    @Param('id') id: number,
     @Body() createLocationDto: CreateLocationDto,
   ) {
     const location = await this.userService.createLocation(
-      profileId,
+      Number(id),
       createLocationDto,
     );
-    return {
-      location,
-    };
+    return { location };
+  }
+
+  @Post('location/:id')
+  async createLocation(
+    @Param('id') id: number,
+    @Body() createLocationDto: CreateLocationDto,
+  ) {
+    const location = await this.userService.createLocation(
+      Number(id),
+      createLocationDto,
+    );
+    return { location };
   }
 }

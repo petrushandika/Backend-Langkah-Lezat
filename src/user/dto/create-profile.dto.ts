@@ -1,13 +1,10 @@
-import { IsOptional, IsArray, IsNumber, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-import { CreateLocationDto } from './create-location.dto';
+import { IsOptional, IsNumber, IsString } from 'class-validator';
 
 export class CreateProfileDto {
+  @IsString()
+  @IsOptional()
+  image?: string;
+
   @IsNumber()
   userId: number;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateLocationDto)
-  location?: CreateLocationDto[];
 }

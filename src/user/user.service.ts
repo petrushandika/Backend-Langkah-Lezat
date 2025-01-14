@@ -53,11 +53,22 @@ export class UserService {
     const profile = await this.prismaService.profile.create({
       data: {
         ...createProfileDto,
-        userId,
+        userId: userId,
       },
     });
 
     return profile;
+  }
+
+  async updateProfile(userId: number, createProfileDto: CreateProfileDto) {
+    const updatedProfile = await this.prismaService.profile.update({
+      where: { userId },
+      data: {
+        ...createProfileDto,
+      },
+    });
+
+    return updatedProfile;
   }
 
   async createLocation(
